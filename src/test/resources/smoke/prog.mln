@@ -1,0 +1,15 @@
+// Predicates
+// observed predicates
+*Friends(person, person)
+// hidden predicate with some ground values given.
+Smokes(person)
+// hidden predicates
+Cancer(person)
+
+// Formulas
+// Smokes(x) => Cancer(x)
+0.5 !Smokes(x) v Cancer(x)
+
+// Friends(x, y) => (Smokes(x) <=> Smokes(y))
+0.4 !Friends(x,y) v !Smokes(x) v Smokes(y)
+0.4 !Friends(x,y) v Smokes(x) v !Smokes(y)
