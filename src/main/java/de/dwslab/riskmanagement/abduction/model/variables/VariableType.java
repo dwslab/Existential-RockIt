@@ -3,6 +3,7 @@ package de.dwslab.riskmanagement.abduction.model.variables;
 import de.dwslab.riskmanagement.abduction.model.types.Type;
 
 public class VariableType extends VariableAbstract {
+
     private Type type;
 
     public VariableType() {

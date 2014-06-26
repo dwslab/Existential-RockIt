@@ -314,13 +314,13 @@ public class Model {
                 if (fc.getOverVariables().size() == 1) {
                     for (VariableType v : fc.getOverVariables()) {
                         sb.append("|").append(v.getType().getName()).append(" ")
-                        .append(v.getName()).append(": ");
+                                .append(v.getName()).append(": ");
                     }
 
                 } else {
                     System.err
-                    .println("More than one over variable is not supported in TheBeast . Rewrite formula f "
-                            + f);
+                            .println("More than one over variable is not supported in TheBeast . Rewrite formula f "
+                                    + f);
                 }
                 if (fc.getRestrictions().size() == 1) {
                     for (PredicateExpression p : fc.getRestrictions()) {
@@ -329,8 +329,8 @@ public class Model {
                     sb.append("|");
                 } else {
                     System.err
-                    .println("More than one restriction is not supported in card constraints in TheBeast . Rewrite formula f "
-                            + f);
+                            .println("More than one restriction is not supported in card constraints in TheBeast . Rewrite formula f "
+                                    + f);
                 }
             } else if (f instanceof FormulaHard) {
                 sb.append(":\n");

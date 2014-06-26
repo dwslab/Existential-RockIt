@@ -13,73 +13,76 @@ import de.dwslab.riskmanagement.abduction.model.variables.VariableType;
  *
  */
 
-public class EqualVariableExpression implements IfExpression{
+public class EqualVariableExpression implements IfExpression {
 
-	private VariableType variable1;
-	private VariableType variable2;
-	private boolean positive;
-	
-	public EqualVariableExpression(VariableType variable1, VariableType variable2, boolean positive) {
-		this.variable1=variable1;
-		this.variable2=variable2;
-		this.positive=positive;
-	}
-	public EqualVariableExpression() {
-		
-	}
-	public boolean isNegative() {
-		
-		return !positive;
-	}
+    private VariableType variable1;
+    private VariableType variable2;
+    private boolean positive;
 
-	public boolean isPositive() {
-		return positive;
-	}
+    public EqualVariableExpression(VariableType variable1, VariableType variable2, boolean positive) {
+        this.variable1 = variable1;
+        this.variable2 = variable2;
+        this.positive = positive;
+    }
 
-	public void setNegative(boolean negative) {
-		this.positive=!negative;
-		
-	}
+    public EqualVariableExpression() {
 
-	public void setPositive(boolean positive) {
-		this.positive=positive;
-		
-	}
+    }
 
-	public void setVariable1(VariableType variable1) {
-		this.variable1 = variable1;
-	}
+    public boolean isNegative() {
 
-	public VariableType getVariable1() {
-		return variable1;
-	}
+        return !positive;
+    }
 
-	public void setVariable2(VariableType variable2) {
-		this.variable2 = variable2;
-	}
+    public boolean isPositive() {
+        return positive;
+    }
 
-	public VariableType getVariable2() {
-		return variable2;
-	}
+    public void setNegative(boolean negative) {
+        this.positive = !negative;
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(variable1.getName());
-		if(this.positive){
-			sb.append("==");
-		}else{
-			sb.append("!=");
-		}
-		sb.append(variable2.getName());
-		return sb.toString();
-	}
-	@Override
-	public HashSet<VariableAbstract> getAllVariables() {
+    }
 
-		HashSet<VariableAbstract> result = new HashSet<VariableAbstract>();
-		result.add(variable1);
-		result.add(variable2);
-		return result;
-	}
+    public void setPositive(boolean positive) {
+        this.positive = positive;
+
+    }
+
+    public void setVariable1(VariableType variable1) {
+        this.variable1 = variable1;
+    }
+
+    public VariableType getVariable1() {
+        return variable1;
+    }
+
+    public void setVariable2(VariableType variable2) {
+        this.variable2 = variable2;
+    }
+
+    public VariableType getVariable2() {
+        return variable2;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(variable1.getName());
+        if (this.positive) {
+            sb.append("==");
+        } else {
+            sb.append("!=");
+        }
+        sb.append(variable2.getName());
+        return sb.toString();
+    }
+
+    @Override
+    public HashSet<VariableAbstract> getAllVariables() {
+
+        HashSet<VariableAbstract> result = new HashSet<VariableAbstract>();
+        result.add(variable1);
+        result.add(variable2);
+        return result;
+    }
 
 }

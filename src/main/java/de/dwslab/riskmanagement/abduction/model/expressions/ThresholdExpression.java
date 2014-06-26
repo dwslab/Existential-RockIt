@@ -6,89 +6,96 @@ import de.dwslab.riskmanagement.abduction.model.variables.VariableAbstract;
 import de.dwslab.riskmanagement.abduction.model.variables.VariableDouble;
 
 /**
- * Adds the clause only if the content of a variable equals the value or not (if isNegative()==true).
+ * Adds the clause only if the content of a variable equals the value or not (if
+ * isNegative()==true).
  * 
  * @author jan
  *
  */
 
-public class ThresholdExpression implements IfExpression{
+public class ThresholdExpression implements IfExpression {
 
-	private VariableDouble variable1;
-	private double value;
-	private boolean lessEqual;
-	
-	/**
-	 * variable1 <= value for lessEqual = true,
-	 * variable1 >= value for lessEqual = false.
-	 * 
-	 * @param variable1
-	 * @param lessEqual
-	 * @param value
-	 */
-	public ThresholdExpression(VariableDouble variable1, boolean lessEqual, double value) {
-		this.variable1=variable1;
-		this.value=value;
-		this.lessEqual=lessEqual;
-	}
-	public ThresholdExpression() {
-		
-	}
+    private VariableDouble variable1;
+    private double value;
+    private boolean lessEqual;
 
+    /**
+     * variable1 <= value for lessEqual = true,
+     * variable1 >= value for lessEqual = false.
+     * 
+     * @param variable1
+     * @param lessEqual
+     * @param value
+     */
+    public ThresholdExpression(VariableDouble variable1, boolean lessEqual, double value) {
+        this.variable1 = variable1;
+        this.value = value;
+        this.lessEqual = lessEqual;
+    }
 
-	public VariableDouble getVariable1() {
-		return variable1;
-	}
-	public void setVariable1(VariableDouble variable1) {
-		this.variable1 = variable1;
-	}
-	public double getValue() {
-		return value;
-	}
-	public void setValue(double value) {
-		this.value = value;
-	}
-	
-	public boolean isGreaterEqual() {
-		return !lessEqual;
-	}
-	/**
-	 * variable >= double value.
-	 * 
-	 * @param greaterEqual
-	 */
-	public void setGreaterEqual(boolean greaterEqual) {
-		this.lessEqual = !greaterEqual;
-	}
-	
-	public boolean isLessEqual() {
-		return lessEqual;
-	}
-	/**
-	 * variable <= double value.
-	 * 
-	 * @param lessEqual
-	 */
-	public void setLessEqual(boolean lessEqual) {
-		this.lessEqual = lessEqual;
-	}
-	
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		//sb.append(variable1.getName());
-		if(this.lessEqual){
-			sb.append("<= ");
-		}else{
-			sb.append(">= ");
-		}
-		sb.append(value);
-		return sb.toString();
-	}
-	@Override
-	public HashSet<VariableAbstract> getAllVariables() {
-		HashSet<VariableAbstract> result = new HashSet<VariableAbstract>();
-		result.add(variable1);
-		return result;
-	}
+    public ThresholdExpression() {
+
+    }
+
+    public VariableDouble getVariable1() {
+        return variable1;
+    }
+
+    public void setVariable1(VariableDouble variable1) {
+        this.variable1 = variable1;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public boolean isGreaterEqual() {
+        return !lessEqual;
+    }
+
+    /**
+     * variable >= double value.
+     * 
+     * @param greaterEqual
+     */
+    public void setGreaterEqual(boolean greaterEqual) {
+        this.lessEqual = !greaterEqual;
+    }
+
+    public boolean isLessEqual() {
+        return lessEqual;
+    }
+
+    /**
+     * variable <= double value.
+     * 
+     * @param lessEqual
+     */
+    public void setLessEqual(boolean lessEqual) {
+        this.lessEqual = lessEqual;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        // sb.append(variable1.getName());
+        if (this.lessEqual) {
+            sb.append("<= ");
+        } else {
+            sb.append(">= ");
+        }
+        sb.append(value);
+        return sb.toString();
+    }
+
+    @Override
+    public HashSet<VariableAbstract> getAllVariables() {
+        HashSet<VariableAbstract> result = new HashSet<VariableAbstract>();
+        result.add(variable1);
+        return result;
+    }
 
 }

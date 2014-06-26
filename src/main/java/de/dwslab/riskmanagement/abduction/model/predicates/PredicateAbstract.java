@@ -7,6 +7,7 @@ import de.dwslab.riskmanagement.abduction.model.HerbrandUniverse;
 import de.dwslab.riskmanagement.abduction.model.types.Type;
 
 public abstract class PredicateAbstract implements Comparable<PredicateAbstract> {
+
     private String name;
     private boolean hidden = false;
     private ArrayList<Type> types = new ArrayList<Type>();

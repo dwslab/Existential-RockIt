@@ -34,7 +34,7 @@ import de.dwslab.riskmanagement.abduction.model.variables.VariableType;
 public class SyntaxReader {
 
     public Model getModel(String modelFile, String groundValueFile) throws ParseException,
-    IOException {
+            IOException {
         Model model;
         try {
             model = this.getModelANTLR(modelFile);
@@ -81,7 +81,7 @@ public class SyntaxReader {
     }
 
     public void setInitialSolution(Model model, String initialSolutionFile) throws IOException,
-    ParseException {
+            ParseException {
         TreeSet<PredicateAbstract> initalSolution;
         try {
             initalSolution = this.getGroundValuesANTLR(initialSolutionFile);
@@ -93,7 +93,7 @@ public class SyntaxReader {
     }
 
     public Model getModelForLearning(String modelFile) throws ParseException, IOException,
-    RecognitionException {
+            RecognitionException {
         Model model = this.getModelANTLR(modelFile);
 
         // figures out the ground values for types and assigns a new predicate to each type
@@ -174,7 +174,7 @@ public class SyntaxReader {
     }
 
     private Model getModelANTLR(String filename) throws IOException, RecognitionException,
-    ParseException {
+            ParseException {
         // Create an input character stream from standard in
         FileInputStream in = new FileInputStream(new File(filename));
         ANTLRInputStream input = new ANTLRInputStream(in);
@@ -190,7 +190,7 @@ public class SyntaxReader {
     }
 
     private TreeSet<PredicateAbstract> getGroundValuesANTLR(String filename) throws IOException,
-    RecognitionException, ParseException {
+            RecognitionException, ParseException {
         // Create an input character stream from standard in
         FileInputStream in = new FileInputStream(new File(filename));
         ANTLRInputStream input = new ANTLRInputStream(in);
@@ -224,7 +224,7 @@ public class SyntaxReader {
                     formulastoRemove.add(f);
                     FormulaObjective fo = new FormulaObjective(fs.getName(), fs.getForVariables(),
                             fs.getIfExpressions(), fs.getDoubleVariable(), fs.getRestrictions()
-                            .get(0));
+                                    .get(0));
                     formulastoAdd.add(fo);
                 }
             }
@@ -309,7 +309,7 @@ public class SyntaxReader {
 
     private Model createNewHiddenPredFormula(Model model,
             ArrayList<PredicateAbstract> remainingGroundValues, boolean positive)
-                    throws ParseException {
+            throws ParseException {
 
         HashSet<PredicateAbstract> hiddenPreds = model.getAllHiddenPredicates();
         for (PredicateAbstract hiddenPred : hiddenPreds) {
@@ -380,7 +380,7 @@ public class SyntaxReader {
                     formularH.setName(name.toString());
                     formularH.setForVariables(forVariables);
                     formularH
-                    .setRestrictions(new PredicateExpression(positive, hiddenPred, varList));
+                            .setRestrictions(new PredicateExpression(positive, hiddenPred, varList));
                     formular = formularH;
                 }
                 model.addFormula(formular);
@@ -660,17 +660,17 @@ public class SyntaxReader {
                     formulasToRemove.add(formular);
                 }
             } /*
-             * else if(formularAbstract instanceof FormulaSoft){
-             * FormulaSoft s = (FormulaSoft) formularAbstract;
-             * double value = 1;
-             * for(Weight w : s.getWeights()){
-             * value = value* w.getValue();
-             * }
-             * if(s.getDoubleVariable()==null && value==0d){
-             * formulasToRemove.add(s);
-             * }
-             * }
-             */
+               * else if(formularAbstract instanceof FormulaSoft){
+               * FormulaSoft s = (FormulaSoft) formularAbstract;
+               * double value = 1;
+               * for(Weight w : s.getWeights()){
+               * value = value* w.getValue();
+               * }
+               * if(s.getDoubleVariable()==null && value==0d){
+               * formulasToRemove.add(s);
+               * }
+               * }
+               */
         }
 
         // - simplify conjunction if parameter is set.
