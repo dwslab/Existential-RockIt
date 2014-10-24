@@ -3,8 +3,8 @@ package de.dwslab.ai.riskmanagement.abduction.parser;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.dwslab.ai.riskmanagement.abduction.model.Model;
-import de.dwslab.ai.riskmanagement.abduction.parser.SyntaxReader;
+import com.googlecode.rockit.javaAPI.Model;
+import com.googlecode.rockit.parser.SyntaxReader;
 
 public class SyntaxReaderTest {
 
