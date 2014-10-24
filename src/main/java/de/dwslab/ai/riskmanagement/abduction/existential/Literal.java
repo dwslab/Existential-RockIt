@@ -5,25 +5,19 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+public class Literal {
 
-public class Literal
-{
-
-    boolean      negated;
-    String       predicate;
+    boolean negated;
+    String predicate;
     List<String> values;
 
-
-    public Literal(boolean negated, String predicate, List<String> values)
-    {
+    public Literal(boolean negated, String predicate, List<String> values) {
         this.negated = negated;
         this.predicate = predicate;
         this.values = values;
     }
 
-
-    public Literal(String literal)
-    {
+    public Literal(String literal) {
         // negated + name
         Pattern pattern = Pattern.compile("\\s*(!)?(\\w+)\\((.*)\\)\\s*");
         // Pattern pattern = Pattern.compile("(!)?\\s*([\\w]*).*");
@@ -31,8 +25,8 @@ public class Literal
 
         String elements = "";
         negated = false;
-        if(matcher.find()) {
-            if((matcher.group(1) != null) && matcher.group(1).equals("!")) {
+        if (matcher.find()) {
+            if ((matcher.group(1) != null) && matcher.group(1).equals("!")) {
                 negated = true;
             }
             predicate = matcher.group(2);
@@ -45,41 +39,33 @@ public class Literal
         Matcher matcher2 = pattern2.matcher(elements);
 
         values = new ArrayList<>();
-        while(matcher2.find()) {
+        while (matcher2.find()) {
             values.add(matcher2.group(1));
         }
     }
 
-
-    public boolean isNegated()
-    {
+    public boolean isNegated() {
         return negated;
     }
 
-
-    public String getPredicate()
-    {
+    public String getPredicate() {
         return predicate;
     }
 
-
-    public List<String> getValues()
-    {
+    public List<String> getValues() {
         return values;
     }
 
-
-    public String valuesToString()
-    {
+    public String valuesToString() {
 
         StringBuilder sb = new StringBuilder();
-        if(negated) {
+        if (negated) {
             sb.append("!" + " ");
         }
 
-        for(int i = 0; i < values.size(); i++) {
+        for (int i = 0; i < values.size(); i++) {
             sb.append(values.get(i));
-            if(i < (values.size() - 1)) {
+            if (i < (values.size() - 1)) {
                 sb.append(", ");
             }
         }
@@ -87,18 +73,16 @@ public class Literal
         return sb.toString();
     }
 
-
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder atom = new StringBuilder();
-        if(negated) {
+        if (negated) {
             atom.append("!");
         }
         atom.append(predicate + "(");
-        for(int i = 0; i < values.size(); i++) {
+        for (int i = 0; i < values.size(); i++) {
             atom.append(values.get(i));
-            if(i < (values.size() - 1)) {
+            if (i < (values.size() - 1)) {
                 atom.append(", ");
             }
         }
@@ -106,4 +90,5 @@ public class Literal
 
         return atom.toString();
     }
+
 }

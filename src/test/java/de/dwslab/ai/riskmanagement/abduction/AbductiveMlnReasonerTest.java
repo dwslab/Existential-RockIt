@@ -19,7 +19,6 @@ public class AbductiveMlnReasonerTest {
         Model extendedModel = reasoner.getExtendedModel(model);
 
         System.out.println(extendedModel);
-
     }
 
 }
