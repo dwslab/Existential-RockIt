@@ -24,6 +24,11 @@ public class SyntaxReaderTest {
         Model model = parser.getModelForLearning(FILE_MODEL);
         model.getFormulas();
         Model grounding = parser.getGroundValuesForLearning(FILE_GROUND_VALUES, model);
+
+        System.out.println(grounding.getAllHiddenPredicates());
+        System.out.println(grounding.getAllHiddenPredicates());
+        System.out.println(grounding.getAllHiddenPredicates());
+        System.out.println(grounding.getFormulas());
     }
 
 }

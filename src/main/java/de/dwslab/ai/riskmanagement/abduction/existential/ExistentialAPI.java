@@ -35,7 +35,7 @@ public class ExistentialAPI {
         Map<String, Set<Literal>> groundings = getGroundings(db);
         Map<String, String> predMapping = getMappings(mln);
 
-        // debugSysout(predicates, entities, groundings, predMapping);
+        debugSysout(predicates, entities, groundings, predMapping);
 
         // DB
 
