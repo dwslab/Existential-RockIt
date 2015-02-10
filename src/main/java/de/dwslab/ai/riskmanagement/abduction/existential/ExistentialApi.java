@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class ExistentialApi {
 
-    public void existenitalApi(String mln, String db, String mlnOut, String dbOut)
+    public void existentialApi(String mln, String db, String mlnOut, String dbOut)
             throws Exception {
         Map<String, Predicate> predicates = getPredicates(mln);
         Map<String, List<String>> entities = getEntities(db, predicates);
@@ -233,7 +233,7 @@ public class ExistentialApi {
                 List<String> e = predEntities.get(i);
                 combinations *= e.size();
                 for (int j = 0; j < i; j++) {
-                    mod[j] = mod[j + e.size()];
+                    mod[j] = mod[j] + e.size();
                 }
             }
             mod[mod.length - 1] = 1;
@@ -361,7 +361,7 @@ public class ExistentialApi {
         String mlnOut = "out/test4_2out.mln";
         String dbOut = "out/test4_2out.db";
 
-        new ExistentialApi().existenitalApi(mln, db, mlnOut, dbOut);
+        new ExistentialApi().existentialApi(mln, db, mlnOut, dbOut);
     }
 
 }
