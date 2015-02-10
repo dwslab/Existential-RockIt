@@ -18,16 +18,6 @@ import java.util.regex.Pattern;
 
 public class ExistentialAPI {
 
-    public static void main(String[] args) throws Exception {
-        String mln = "data/test4_2.mln";
-        String db = "data/test4_2.db";
-
-        String mlnOut = "out/test4_2out.mln";
-        String dbOut = "out/test4_2out.db";
-
-        existenitalAPI(mln, db, mlnOut, dbOut);
-    }
-
     public static void existenitalAPI(String mln, String db, String mlnOut, String dbOut)
             throws Exception {
         Map<String, Predicate> predicates = getPredicates(mln);
@@ -59,38 +49,6 @@ public class ExistentialAPI {
         // MLN
         List<String> newMLN = transformMLN(mln, predicates, predMapping, entities, groundings);
         write(mlnOut, newMLN);
-
-    }
-
-    private static void debugSysout(Map<String, Predicate> predicates,
-            Map<String, List<String>> entities, Map<String, Set<Literal>> groundings,
-            Map<String, String> predMapping) {
-        System.out.println();
-        System.out.println("PREDICATES");
-        for (Predicate p : predicates.values()) {
-            System.out.println("\t" + p);
-        }
-
-        System.out.println("ENTITIES:");
-        for (String t : entities.keySet()) {
-            System.out.println("\t" + t);
-            for (String e : entities.get(t)) {
-                System.out.println("\t\t" + e);
-            }
-        }
-        System.out.println();
-        System.out.println("GROUNDINGS:");
-        for (String p : groundings.keySet()) {
-            System.out.println("\t" + p);
-            for (Literal values : groundings.get(p)) {
-                System.out.println("\t\t" + values.valuesToString());
-            }
-        }
-        System.out.println();
-        System.out.println("MAPPINGS:");
-        for (String p : predMapping.keySet()) {
-            System.out.println("\t\t" + p + " - " + predMapping.get(p));
-        }
 
     }
 
@@ -225,7 +183,7 @@ public class ExistentialAPI {
 
                 String name = p.substring(0, p.indexOf("(")).trim();
 
-                List<String> types = new ArrayList<String>();
+                List<String> types = new ArrayList<>();
                 Pattern pattern = Pattern.compile("([^\\s(),]+)");
                 Matcher matcher = pattern.matcher(p.substring(p.indexOf("(")));
                 while (matcher.find()) {
@@ -355,25 +313,68 @@ public class ExistentialAPI {
     }
 
     public static List<String> readFile(String f) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
-                "UTF-8"));
-        String line;
-        List<String> lines = new ArrayList<>();
-        while ((line = br.readLine()) != null) {
-            lines.add(line);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
+                "UTF-8"))) {
+            String line;
+            List<String> lines = new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+            br.close();
+            return lines;
         }
-        br.close();
-        return lines;
     }
 
     public static void write(String f, List<String> data) throws Exception {
-        Writer outWriter = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(f, false), "UTF-8"));
-        for (String line : data) {
-            outWriter.write(line + System.lineSeparator());
+        try (Writer outWriter = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(f, false), "UTF-8"))) {
+            for (String line : data) {
+                outWriter.write(line + System.lineSeparator());
+            }
+            outWriter.close();
         }
-        outWriter.flush();
-        outWriter.close();
+    }
+
+    private static void debugSysout(Map<String, Predicate> predicates,
+            Map<String, List<String>> entities, Map<String, Set<Literal>> groundings,
+            Map<String, String> predMapping) {
+        System.out.println();
+        System.out.println("PREDICATES");
+        for (Predicate p : predicates.values()) {
+            System.out.println("\t" + p);
+        }
+
+        System.out.println("ENTITIES:");
+        for (String t : entities.keySet()) {
+            System.out.println("\t" + t);
+            for (String e : entities.get(t)) {
+                System.out.println("\t\t" + e);
+            }
+        }
+        System.out.println();
+        System.out.println("GROUNDINGS:");
+        for (String p : groundings.keySet()) {
+            System.out.println("\t" + p);
+            for (Literal values : groundings.get(p)) {
+                System.out.println("\t\t" + values.valuesToString());
+            }
+        }
+        System.out.println();
+        System.out.println("MAPPINGS:");
+        for (String p : predMapping.keySet()) {
+            System.out.println("\t\t" + p + " - " + predMapping.get(p));
+        }
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        String mln = "data/test4_2.mln";
+        String db = "data/test4_2.db";
+
+        String mlnOut = "out/test4_2out.mln";
+        String dbOut = "out/test4_2out.db";
+
+        existenitalAPI(mln, db, mlnOut, dbOut);
     }
 
 }
