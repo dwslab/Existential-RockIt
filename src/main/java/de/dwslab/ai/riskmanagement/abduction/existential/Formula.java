@@ -133,7 +133,7 @@ public class Formula {
 
                         }
                     } // end: get "?"
-                    c2.add(new ArrayList<String>(groundValue));
+                    c2.add(new ArrayList<>(groundValue));
                 } // for: end elements of literal
 
                 List<List<String>> groundPredComp = generateCombinations2(c2);
@@ -222,7 +222,6 @@ public class Formula {
         counter *= varCount;
 
         Map<String, String> tempComp = new HashMap<>();
-
         for (int i = 1; i <= counter; i++) {
             int v = (i - 1) % varCount;
             String vName = vars.get(v);

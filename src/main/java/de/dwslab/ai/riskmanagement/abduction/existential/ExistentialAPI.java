@@ -18,23 +18,19 @@ import java.util.regex.Pattern;
 
 public class ExistentialAPI {
 
-    public static void existenitalAPI(String mln, String db, String mlnOut, String dbOut)
+    public void existenitalAPI(String mln, String db, String mlnOut, String dbOut)
             throws Exception {
         Map<String, Predicate> predicates = getPredicates(mln);
         Map<String, List<String>> entities = getEntities(db, predicates);
         Map<String, Set<Literal>> groundings = getGroundings(db);
         Map<String, String> predMapping = getMappings(mln);
 
-        debugSysout(predicates, entities, groundings, predMapping);
-
-        // DB
+        // debugSysout(predicates, entities, groundings, predMapping);
 
         // TODO state for which predicate all "missing" negated grounding should be created
         List<String> targetPredicates = new ArrayList<>();
         // all weighted predicates
-        for (String p : predMapping.keySet()) {
-            targetPredicates.add(p);
-        }
+        targetPredicates.addAll(predMapping.keySet());
 
         generateNegatedGroundings(predicates, entities, groundings, predMapping, targetPredicates);
 
@@ -52,35 +48,29 @@ public class ExistentialAPI {
 
     }
 
-    private static Map<String, String> getMappings(String mln) throws Exception {
+    private Map<String, String> getMappings(String mln) throws Exception {
         Map<String, String> mappings = new HashMap<>();
+
+        Pattern pattern = Pattern.compile("\\w*: .*");
+        Pattern pattern2 = Pattern.compile(".* ([!]?\\w+\\(.*\\))\\s*v\\s*([!]?\\w+\\(.*\\)).*");
 
         for (String f : readFile(mln)) {
             // match weighted formula
-            Pattern pattern = Pattern.compile("\\w*: .*");
             Matcher matcher = pattern.matcher(f);
             if (!matcher.find()) {
                 continue;
             }
 
             // match g1 v g2
-            Pattern pattern2 = Pattern
-                    .compile(".* ([!]?\\w+\\(.*\\))\\s*v\\s*([!]?\\w+\\(.*\\)).*");
             Matcher matcher2 = pattern2.matcher(f);
+            while (matcher2.find() && matcher2.groupCount() == 2) {
+                Literal l1 = new Literal(matcher2.group(1));
+                Literal l2 = new Literal(matcher2.group(2));
 
-            List<Literal> literals = new ArrayList<>();
-
-            while (matcher2.find()) {
-                literals.add(new Literal(matcher2.group(1)));
-                literals.add(new Literal(matcher2.group(2)));
-            }
-
-            if (literals.size() == 2) {
-                if (literals.get(1).getValues().size() == (literals.get(0).getValues().size() + 1)) {
-                    mappings.put(literals.get(0).getPredicate(), literals.get(1).getPredicate());
-                } else if (literals.get(0).getValues().size() == (literals.get(1).getValues()
-                        .size() + 1)) {
-                    mappings.put(literals.get(1).getPredicate(), literals.get(0).getPredicate());
+                if (l2.getValues().size() == l1.getValues().size() + 1) {
+                    mappings.put(l1.getPredicate(), l2.getPredicate());
+                } else if (l1.getValues().size() == l2.getValues().size() + 1) {
+                    mappings.put(l2.getPredicate(), l1.getPredicate());
                 }
             }
         }
@@ -88,11 +78,13 @@ public class ExistentialAPI {
         return mappings;
     }
 
-    private static Map<String, Set<Literal>> getGroundings(String db) throws Exception {
+    private Map<String, Set<Literal>> getGroundings(String db) throws Exception {
         Map<String, Set<Literal>> groundings = new HashMap<>();
 
+        Pattern pattern = Pattern.compile("(!)?\\s*(\\w*).*");
+        Pattern pattern2 = Pattern.compile("([^\\s(),]+)[,\\s)]+");
+
         for (String s : readFile(db)) {
-            Pattern pattern = Pattern.compile("(!)?\\s*(\\w*).*");
             Matcher matcher = pattern.matcher(s);
             String predicate = null;
             boolean negated = false;
@@ -107,7 +99,6 @@ public class ExistentialAPI {
                 continue;
             }
 
-            Pattern pattern2 = Pattern.compile("([^\\s(),]+)[,\\s)]+");
             Matcher matcher2 = pattern2.matcher(s);
 
             List<String> values = new ArrayList<>();
@@ -126,13 +117,15 @@ public class ExistentialAPI {
         return groundings;
     }
 
-    private static Map<String, List<String>> getEntities(String db,
-            Map<String, Predicate> predicates) throws Exception {
+    private Map<String, List<String>> getEntities(String db, Map<String, Predicate> predicates)
+            throws Exception {
         Map<String, Set<String>> entities = new HashMap<>();
+
+        Pattern pattern = Pattern.compile("[*]?\\s*(\\w*).*");
+        Pattern pattern2 = Pattern.compile("([^\\s(),]+)[,\\s)]+");
 
         for (String groundAxiom : readFile(db)) {
             // predicate
-            Pattern pattern = Pattern.compile("[*]?\\s*(\\w*).*");
             Matcher matcher = pattern.matcher(groundAxiom);
             String predicate = null;
             if (matcher.find()) {
@@ -144,7 +137,6 @@ public class ExistentialAPI {
             }
 
             // entities
-            Pattern pattern2 = Pattern.compile("([^\\s(),]+)[,\\s)]+");
             Matcher matcher2 = pattern2.matcher(groundAxiom);
             int counter = 0;
 
@@ -170,7 +162,7 @@ public class ExistentialAPI {
         return entities2;
     }
 
-    private static Map<String, Predicate> getPredicates(String mln) throws Exception {
+    private Map<String, Predicate> getPredicates(String mln) throws Exception {
         Map<String, Predicate> map = new HashMap<>();
         for (String p : readFile(mln)) {
             p = p.trim();
@@ -197,7 +189,7 @@ public class ExistentialAPI {
         return map;
     }
 
-    private static Set<Literal> generateNegatedGroundings(Map<String, Predicate> predicates,
+    private Set<Literal> generateNegatedGroundings(Map<String, Predicate> predicates,
             Map<String, List<String>> entities, Map<String, Set<Literal>> groundings,
             Map<String, String> predMapping, List<String> targetPredicates) {
         Set<Literal> allNewGroundings = new HashSet<>();
@@ -249,7 +241,6 @@ public class ExistentialAPI {
 
             List<List<String>> allCombinations = new ArrayList<>();
             List<String> tempComp = new ArrayList<>();
-
             for (int i = 1; i <= combinations; i++) {
                 int position = (i - 1) % elements;
                 int entityNumber = (((i - 1) / elements) / mod[position])
@@ -281,7 +272,7 @@ public class ExistentialAPI {
         return allNewGroundings;
     }
 
-    private static List<String> transformMLN(String mln, Map<String, Predicate> predicates,
+    private List<String> transformMLN(String mln, Map<String, Predicate> predicates,
             Map<String, String> predMapping, Map<String, List<String>> entities,
             Map<String, Set<Literal>> groundings) throws Exception {
         List<String> formulas = readFile(mln);
@@ -309,7 +300,7 @@ public class ExistentialAPI {
         return out;
     }
 
-    public static List<String> readFile(String f) throws Exception {
+    private List<String> readFile(String f) throws Exception {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
                 "UTF-8"))) {
             String line;
@@ -322,7 +313,7 @@ public class ExistentialAPI {
         }
     }
 
-    public static void write(String f, List<String> data) throws Exception {
+    private void write(String f, List<String> data) throws Exception {
         try (Writer outWriter = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(f, false), "UTF-8"))) {
             for (String line : data) {
@@ -332,9 +323,8 @@ public class ExistentialAPI {
         }
     }
 
-    private static void debugSysout(Map<String, Predicate> predicates,
-            Map<String, List<String>> entities, Map<String, Set<Literal>> groundings,
-            Map<String, String> predMapping) {
+    private void debugSysout(Map<String, Predicate> predicates, Map<String, List<String>> entities,
+            Map<String, Set<Literal>> groundings, Map<String, String> predMapping) {
         System.out.println();
         System.out.println("PREDICATES");
         for (Predicate p : predicates.values()) {
@@ -371,7 +361,7 @@ public class ExistentialAPI {
         String mlnOut = "out/test4_2out.mln";
         String dbOut = "out/test4_2out.db";
 
-        existenitalAPI(mln, db, mlnOut, dbOut);
+        new ExistentialAPI().existenitalAPI(mln, db, mlnOut, dbOut);
     }
 
 }
