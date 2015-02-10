@@ -16,9 +16,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExistentialAPI {
+public class ExistentialApi {
 
-    public void existenitalAPI(String mln, String db, String mlnOut, String dbOut)
+    public void existenitalApi(String mln, String db, String mlnOut, String dbOut)
             throws Exception {
         Map<String, Predicate> predicates = getPredicates(mln);
         Map<String, List<String>> entities = getEntities(db, predicates);
@@ -361,7 +361,7 @@ public class ExistentialAPI {
         String mlnOut = "out/test4_2out.mln";
         String dbOut = "out/test4_2out.db";
 
-        new ExistentialAPI().existenitalAPI(mln, db, mlnOut, dbOut);
+        new ExistentialApi().existenitalApi(mln, db, mlnOut, dbOut);
     }
 
 }
