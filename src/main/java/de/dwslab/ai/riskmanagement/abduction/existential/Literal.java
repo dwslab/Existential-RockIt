@@ -57,7 +57,6 @@ public class Literal {
     }
 
     public String valuesToString() {
-
         StringBuilder sb = new StringBuilder();
         if (negated) {
             sb.append("!" + " ");
