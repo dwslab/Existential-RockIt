@@ -235,19 +235,16 @@ public class ExistentialAPI {
 
             int elements = pred.getTypes().size();
             int combinations = 1;
-            List<Integer> mod = new ArrayList<>(predEntities.size());
-            for (int i = 0; i < predEntities.size(); i++) {
-                mod.add(0);
-            }
 
+            int[] mod = new int[predEntities.size()];
             for (int i = 0; i < predEntities.size(); i++) {
                 List<String> e = predEntities.get(i);
                 combinations *= e.size();
                 for (int j = 0; j < i; j++) {
-                    mod.set(j, mod.get(j) + e.size());
+                    mod[j] = mod[j + e.size()];
                 }
             }
-            mod.set(mod.size() - 1, 1);
+            mod[mod.length - 1] = 1;
             combinations *= elements;
 
             List<List<String>> allCombinations = new ArrayList<>();
@@ -255,7 +252,7 @@ public class ExistentialAPI {
 
             for (int i = 1; i <= combinations; i++) {
                 int position = (i - 1) % elements;
-                int entityNumber = (((i - 1) / elements) / mod.get(position))
+                int entityNumber = (((i - 1) / elements) / mod[position])
                         % predEntities.get(position).size();
                 // System.out.print(i + " -> " + position + " - " + eNumber);
                 String nextEntity = predEntities.get(position).get(entityNumber);
