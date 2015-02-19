@@ -18,12 +18,17 @@ import java.util.regex.Pattern;
 
 public class ExistentialApi {
 
-    public void existentialApi(String mln, String db, String mlnOut, String dbOut)
-            throws Exception {
-        Map<String, Predicate> predicates = getPredicates(mln);
-        Map<String, List<String>> entities = getEntities(db, predicates);
-        Map<String, Set<Literal>> groundings = getGroundings(db);
-        Map<String, String> predMapping = getMappings(mln);
+    private Map<String, Predicate> predicates;
+    private Map<String, List<String>> entities;
+    private Map<String, Set<Literal>> groundings;
+    private Map<String, String> predMapping;
+    private List<String> allGroundings = new ArrayList<>();
+
+    public void existentialApi(String mln, String db, String mlnOut, String dbOut) throws Exception {
+        predicates = getPredicates(mln);
+        entities = getEntities(db, predicates);
+        groundings = getGroundings(db);
+        predMapping = getMappings(mln);
 
         // debugSysout(predicates, entities, groundings, predMapping);
 
@@ -33,18 +38,10 @@ public class ExistentialApi {
         targetPredicates.addAll(predMapping.keySet());
 
         generateNegatedGroundings(predicates, entities, groundings, predMapping, targetPredicates);
+        groundingsToString();
 
-        List<String> allGroundings = new ArrayList<>();
-        for (Set<Literal> gs : groundings.values()) {
-            for (Literal g : gs) {
-                allGroundings.add(g.toString());
-            }
-        }
-        write(dbOut, allGroundings);
-
-        // MLN
-        List<String> newMLN = transformMLN(mln, predicates, predMapping, entities, groundings);
-        write(mlnOut, newMLN);
+        write(mlnOut, transformMLN(mln, predicates, predMapping, entities, groundings), false);
+        write(dbOut, allGroundings, false);
 
     }
 
@@ -166,7 +163,8 @@ public class ExistentialApi {
         Map<String, Predicate> map = new HashMap<>();
         for (String p : readFile(mln)) {
             p = p.trim();
-            if ((p.length() > 0) && !p.startsWith("//") && (!p.contains("v") && !p.contains("\""))) {
+            if ((p.length() > 0) && !p.startsWith("//")
+                    && (!p.contains(" v ") && !p.contains("\""))) {
                 boolean observed = false;
                 if (p.startsWith("*")) {
                     observed = true;
@@ -174,7 +172,6 @@ public class ExistentialApi {
                 }
 
                 String name = p.substring(0, p.indexOf("(")).trim();
-
                 List<String> types = new ArrayList<>();
                 Pattern pattern = Pattern.compile("([^\\s(),]+)");
                 Matcher matcher = pattern.matcher(p.substring(p.indexOf("(")));
@@ -272,12 +269,22 @@ public class ExistentialApi {
         return allNewGroundings;
     }
 
+    private void groundingsToString() {
+        for (Set<Literal> gs : groundings.values()) {
+            for (Literal g : gs) {
+                allGroundings.add(g.toString());
+            }
+        }
+    }
+
     private List<String> transformMLN(String mln, Map<String, Predicate> predicates,
             Map<String, String> predMapping, Map<String, List<String>> entities,
             Map<String, Set<Literal>> groundings) throws Exception {
         List<String> formulas = readFile(mln);
-
         List<String> out = new ArrayList<>();
+
+        Set<String> newGroundings = new HashSet<>();
+
         for (String f : formulas) {
             out.add(f);
             if (!f.startsWith("// ?")) {
@@ -294,9 +301,13 @@ public class ExistentialApi {
 
             List<String> groundForumulas = formula.getGroundFormulas(predicates, predMapping,
                     entities, groundings);
+            newGroundings.addAll(formula.getNewGroundings());
             out.addAll(groundForumulas);
             out.add("");
         }
+
+        allGroundings.addAll(newGroundings);
+
         return out;
     }
 
@@ -313,9 +324,9 @@ public class ExistentialApi {
         }
     }
 
-    private void write(String f, List<String> data) throws Exception {
-        try (Writer outWriter = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(f, false), "UTF-8"))) {
+    private void write(String f, List<String> data, boolean append) throws Exception {
+        try (Writer outWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f,
+                append), "UTF-8"))) {
             for (String line : data) {
                 outWriter.write(line + System.lineSeparator());
             }
@@ -323,7 +334,7 @@ public class ExistentialApi {
         }
     }
 
-    private void debugSysout(Map<String, Predicate> predicates, Map<String, List<String>> entities,
+    public void debugSysout(Map<String, Predicate> predicates, Map<String, List<String>> entities,
             Map<String, Set<Literal>> groundings, Map<String, String> predMapping) {
         System.out.println();
         System.out.println("PREDICATES");
@@ -355,13 +366,14 @@ public class ExistentialApi {
     }
 
     public static void main(String[] args) throws Exception {
-        String mln = "data/test4_2.mln";
-        String db = "data/test4_2.db";
+        String mln = "tmp/data/love-hate-example.mln";
+        String db = "tmp/data/love-hate-example.db";
 
-        String mlnOut = "out/test4_2out.mln";
-        String dbOut = "out/test4_2out.db";
+        String mlnOut = "tmp/data/love-hate-example-out.mln";
+        String dbOut = "tmp/data/love-hate-example-out.db";
 
         new ExistentialApi().existentialApi(mln, db, mlnOut, dbOut);
+
     }
 
 }
