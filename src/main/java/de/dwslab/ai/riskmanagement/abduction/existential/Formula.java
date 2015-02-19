@@ -84,9 +84,8 @@ public class Formula {
                                 // constant
                                 exPredVars.add(exVar);
                             } else {
-                                System.err.println("Something is wrong with this formula:");
-                                System.err.println(toString());
-                                System.err.println(var);
+                                throw new RuntimeException("Something is wrong with this formula: "
+                                        + toString() + " " + var);
                             }
                         }
 
@@ -123,10 +122,11 @@ public class Formula {
                                 if (t0.equals("?")) {
                                     q = t1;
                                 } else if (!t0.equals(t1)) {
-                                    // no match
+                                    q = null;
                                     break;
                                 }
                             }
+
                             if (q != null) {
                                 groundValue.add(q);
                             }
@@ -144,11 +144,22 @@ public class Formula {
             }
             // System.out.println(f);
 
-            groundFormulas.add(f.toString());
+            if (f.literals.size() > 1) {
+                groundFormulas.add(f.toString());
+            } else if (f.literals.size() == 1) {
+                Literal l = f.literals.get(0);
+                newGroundings.add(l.toString());
+            }
             // break;
         }
 
         return groundFormulas;
+    }
+
+    Set<String> newGroundings = new HashSet<>();
+
+    public Set<String> getNewGroundings() {
+        return newGroundings;
     }
 
     private List<List<String>> generateCombinations2(List<List<String>> vars) {
@@ -245,6 +256,9 @@ public class Formula {
 
         for (Literal l : literals) {
             List<String> vars = l.getValues();
+            // System.out.println(predicates);
+            // System.out.println(l.getPredicate());
+
             List<String> types = predicates.get(l.getPredicate()).getTypes();
             for (int i = 0; i < vars.size(); i++) {
                 String var = vars.get(i);
