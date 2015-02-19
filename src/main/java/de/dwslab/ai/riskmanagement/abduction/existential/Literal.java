@@ -20,7 +20,6 @@ public class Literal {
     public Literal(String literal) {
         // negated + name
         Pattern pattern = Pattern.compile("\\s*(!)?(\\w+)\\((.*)\\)\\s*");
-        // Pattern pattern = Pattern.compile("(!)?\\s*([\\w]*).*");
         Matcher matcher = pattern.matcher(literal.trim());
 
         String elements = "";
@@ -34,8 +33,7 @@ public class Literal {
         }
 
         // variables
-        // Pattern pattern2 = Pattern.compile("([^\\s(),]+)[,\\s)]+");
-        Pattern pattern2 = Pattern.compile("([\\w\\?]+|(\\[.*\\]))+\\s*,?");
+        Pattern pattern2 = Pattern.compile("([\\w\\?]+|(\\[[^\\]]*\\]))+\\s*,?");
         Matcher matcher2 = pattern2.matcher(elements);
 
         values = new ArrayList<>();
@@ -88,6 +86,15 @@ public class Literal {
         atom.append(")");
 
         return atom.toString();
+    }
+
+    public static void main(String[] args) {
+        Literal l = new Literal("hates([parent(?,x)],[parent(?,y)])");
+        // Literal l = new Literal("hasRisk(x, [hasRisk(x,?)])");
+        System.out.println(l);
+        for (String var : l.getValues()) {
+            System.out.println(var);
+        }
     }
 
 }
