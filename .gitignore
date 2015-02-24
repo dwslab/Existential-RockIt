@@ -1,4 +1,12 @@
-
-# /
-/target
-/out
+out/
+.metadata/
+bin/
+target/
+.settings/
+*.aux
+*.bbl
+*.blg
+*.synctex
+*.synctex.gz
+*.tps
+.svn/
