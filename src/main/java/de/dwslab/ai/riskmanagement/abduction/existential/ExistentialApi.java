@@ -101,9 +101,9 @@ public class ExistentialApi {
             List<String> values = new ArrayList<>();
             while (matcher2.find()) {
                 String entity = matcher2.group(1);
-                if (!entity.startsWith("\"") && !entity.endsWith("\"")) {
-                    entity = "\"" + entity + "\"";
-                }
+                // if (!entity.startsWith("\"") && !entity.endsWith("\"")) {
+                // entity = "\"" + entity + "\"";
+                // }
 
                 values.add(entity);
             }
@@ -379,8 +379,8 @@ public class ExistentialApi {
     }
 
     public static void main(String[] args) throws Exception {
-        String mln = "data/love-hate-example.mln";
-        String db = "data/love-hate-example.db";
+        String mln = "data/test4_2.mln";
+        String db = "data/test4_2.db";
 
         String mlnOut = "data/love-hate-example-out.mln";
         String dbOut = "data/love-hate-example-out.db";
