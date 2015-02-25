@@ -7,4 +7,6 @@
 hates(Person,Person)
 loves(Person, Person)
 
+conf: !lovesDegree(x, y, conf) v loves(x, y)
+
 // ? !loves(x,y) v hates([parent(?,x)],[parent(?,y)])
