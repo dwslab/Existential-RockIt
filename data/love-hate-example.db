@@ -1,0 +1,5 @@
+parent(Winona, "Willy W")
+parent("Winfried W", "Willy W")
+
+parent("Paul P", "Paulinchen")
+parent("Paula P", Paulinchen)

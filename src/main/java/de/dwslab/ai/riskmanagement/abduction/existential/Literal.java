@@ -33,12 +33,63 @@ public class Literal {
         }
 
         // variables
-        Pattern pattern2 = Pattern.compile("([\\w\\?]+|(\\[[^\\]]*\\]))+\\s*,?");
-        Matcher matcher2 = pattern2.matcher(elements);
-
         values = new ArrayList<>();
-        while (matcher2.find()) {
-            values.add(matcher2.group(1));
+
+        // Pattern pattern2 = Pattern.compile("([\\w\\?]+|(\\[[^\\]]*\\]))+\\s*,?");
+        // Matcher matcher2 = pattern2.matcher(elements);
+        // while (matcher2.find()) {
+        // values.add(matcher2.group(1));
+        // }
+
+        // System.out.println("LITERAL\t" + literal);
+        // System.out.println("\tELEMENTS\t" + elements);
+
+        int begin = 0;
+        char delimiter = 0;
+        boolean start = true;
+        for (int i = 0; i < elements.length(); i++) {
+            char currentChar = elements.charAt(i);
+            char nextChar = 0;
+            boolean last = (i + 1 == elements.length());
+            if (!last) {
+                nextChar = elements.charAt(i + 1);
+            }
+            // System.out.println(i + "\t" + currentChar + "\t" + nextChar + "\t" + start + "\t"
+            // + delimiter);
+
+            if (start) {
+                begin = i;
+            }
+            if (currentChar == '[' && start) {
+                start = false;
+                delimiter = ']';
+            } else if (currentChar == '\"' && start) {
+                start = false;
+                delimiter = '\"';
+                // } else if (currentChar == delimiter) {
+                // split = true;
+            } else if (currentChar != ',' && currentChar != ' ' && currentChar != ']'
+                    && delimiter == 0) {
+                start = false;
+                delimiter = ',';
+            }
+
+            if (nextChar == delimiter || last) {
+                if (delimiter == ',') {
+                    values.add(elements.substring(begin, i + 1).trim());
+                    i = i + 1;
+                } else {
+                    values.add(elements.substring(begin, i + 2).trim());
+                    i = i + 2;
+                }
+
+                start = true;
+                delimiter = 0;
+            }
+
+            if (last) {
+                break;
+            }
         }
     }
 
@@ -89,11 +140,17 @@ public class Literal {
     }
 
     public static void main(String[] args) {
-        Literal l = new Literal("hates([parent(?,x)],[parent(?,y)])");
-        // Literal l = new Literal("hasRisk(x, [hasRisk(x,?)])");
+
+        Literal l;
+        l = new Literal("hates([parent(?,x)],[parent(?,y)])");
+        // l = new Literal("hasRisk(x, [hasRisk(x,?)])");
+        // l = new Literal("predicate(xy, \"T A\", [parent(?,x)],[parent(?,y)])");
+        // l = new Literal("hates([parent(?,xx)] , [parent(?,yy)])");
+        // l = new Literal("parent(?,x)");
+
         System.out.println(l);
         for (String var : l.getValues()) {
-            System.out.println(var);
+            System.out.println("\t - " + var);
         }
     }
 

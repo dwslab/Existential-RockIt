@@ -1,0 +1,10 @@
+// Observed Predicates
+
+*parent(Person, Person)
+
+// Hidden Predicates
+
+hates(Person,Person)
+loves(Person, Person)
+
+// ? !loves(x,y) v hates([parent(?,x)],[parent(?,y)])

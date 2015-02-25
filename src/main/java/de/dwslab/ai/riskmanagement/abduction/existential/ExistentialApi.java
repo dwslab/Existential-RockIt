@@ -79,7 +79,7 @@ public class ExistentialApi {
         Map<String, Set<Literal>> groundings = new HashMap<>();
 
         Pattern pattern = Pattern.compile("(!)?\\s*(\\w*).*");
-        Pattern pattern2 = Pattern.compile("([^\\s(),]+)[,\\s)]+");
+        Pattern pattern2 = Pattern.compile("((\"(([^\",]+))\")|([^()\",]+))[,\\s)]+");
 
         for (String s : readFile(db)) {
             Matcher matcher = pattern.matcher(s);
@@ -100,7 +100,12 @@ public class ExistentialApi {
 
             List<String> values = new ArrayList<>();
             while (matcher2.find()) {
-                values.add(matcher2.group(1));
+                String entity = matcher2.group(1);
+                if (!entity.startsWith("\"") && !entity.endsWith("\"")) {
+                    entity = "\"" + entity + "\"";
+                }
+
+                values.add(entity);
             }
 
             if (!groundings.containsKey(predicate)) {
@@ -119,7 +124,9 @@ public class ExistentialApi {
         Map<String, Set<String>> entities = new HashMap<>();
 
         Pattern pattern = Pattern.compile("[*]?\\s*(\\w*).*");
-        Pattern pattern2 = Pattern.compile("([^\\s(),]+)[,\\s)]+");
+
+        // Pattern pattern2 = Pattern.compile("([^\\s(),]+)[,\\s)]+");
+        Pattern pattern2 = Pattern.compile("((\"(([^\",]+))\")|([^()\",]+))[,\\s)]+");
 
         for (String groundAxiom : readFile(db)) {
             // predicate
@@ -138,8 +145,14 @@ public class ExistentialApi {
             int counter = 0;
 
             List<String> types = predicates.get(predicate).getTypes();
+
             while (matcher2.find()) {
                 String entity = matcher2.group(1);
+
+                if (!entity.startsWith("\"") && !entity.endsWith("\"")) {
+                    entity = "\"" + entity + "\"";
+                }
+
                 String type = types.get(counter++);
 
                 if (!entities.containsKey(type)) {
@@ -366,11 +379,11 @@ public class ExistentialApi {
     }
 
     public static void main(String[] args) throws Exception {
-        String mln = "tmp/data/love-hate-example.mln";
-        String db = "tmp/data/love-hate-example.db";
+        String mln = "data/love-hate-example.mln";
+        String db = "data/love-hate-example.db";
 
-        String mlnOut = "tmp/data/love-hate-example-out.mln";
-        String dbOut = "tmp/data/love-hate-example-out.db";
+        String mlnOut = "data/love-hate-example-out.mln";
+        String dbOut = "data/love-hate-example-out.db";
 
         new ExistentialApi().existentialApi(mln, db, mlnOut, dbOut);
 

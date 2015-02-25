@@ -224,6 +224,9 @@ public class Formula {
         // count combinations
         for (int i = 0; i < varCount; i++) {
             List<String> e = entities.get(variables.get(vars.get(i)));
+            if (e == null) {
+                return combinations;
+            }
             counter *= e.size();
             for (int j = 0; j < i; j++) {
                 mod.set(j, mod.get(j) + e.size());
