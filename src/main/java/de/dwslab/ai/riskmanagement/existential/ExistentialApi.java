@@ -1,4 +1,4 @@
-package de.dwslab.ai.riskmanagement.abduction.existential;
+package de.dwslab.ai.riskmanagement.existential;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
