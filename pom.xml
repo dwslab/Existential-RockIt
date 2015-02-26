@@ -12,18 +12,6 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr</artifactId>
-			<version>3.4</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.googlecode.rockit</groupId>
-			<artifactId>rockit</artifactId>
-			<version>[0.5.276,)</version>
-		</dependency>
-
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
