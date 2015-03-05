@@ -379,8 +379,8 @@ public class ExistentialApi {
     }
 
     public static void main(String[] args) throws Exception {
-        String mln = "data/test4_2.mln";
-        String db = "data/test4_2.db";
+        String mln = "data/love-hate-example.mln";
+        String db = "data/love-hate-example.db";
 
         String mlnOut = "data/love-hate-example-out.mln";
         String dbOut = "data/love-hate-example-out.db";
